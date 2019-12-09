@@ -4,8 +4,6 @@ from shapely.geometry import shape
 import json
 import sys
 import re
-from random import random
-import time
 
 sys.path.append('.')
 WORD_RE = re.compile(r"[\w']+")
