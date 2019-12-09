@@ -93,7 +93,7 @@ class MRTweetSentiment(MRJob):
         return sentiment
 
     @staticmethod
-    def box_to_province(bounding_box):
+    def box_to_region(bounding_box):
         """
         This function receives a dict including coordinates that resemble a
         Polygon, and checks whether that Polygon is included in any bigger
@@ -124,9 +124,11 @@ class MRTweetSentiment(MRJob):
             country = place.get('country_code')
             bounding_box = place.get('bounding_box')
             tweet_text = tweet.get('text')
-            if (country == 'ES') & (tweet_text is not None):
+            lang = tweet.get('lang')
+            if (country == 'ES') & (tweet_text is not None) & \
+                    (lang == 'es'):
                 # region = place.get('name')
-                region = self.box_to_province(bounding_box)
+                region = self.box_to_region(bounding_box)
                 if region:
                     sentiment = self.compute_sentiment(tweet_text)
                     yield (region, sentiment)
@@ -145,7 +147,6 @@ class MRTweetSentiment(MRJob):
         # Place may not be informed
         if place is not None:
             country = place.get('country_code')
-            place_type = place.get('place_type')
             tweet_text = tweet.get('text')
             lang = tweet.get('lang')
             if (country == 'ES') & (tweet_text is not None) & \
